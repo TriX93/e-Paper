@@ -29,11 +29,6 @@
 ******************************************************************************/
 #include "EPD_Test.h"
 #include "EPD_2in13.h"
-#include <unistd.h>
-#include <ifaddrs.h>
-#include <sys/socket.h>
-#include <netdb.h>
-
 
 int EPD_2in13_test(void)
 {
@@ -58,7 +53,7 @@ int EPD_2in13_test(void)
     printf("Paint_NewImage\r\n");
     Paint_NewImage(BlackImage, EPD_2IN13_WIDTH, EPD_2IN13_HEIGHT, 270, WHITE);
 
-#if 0   // show bmp
+#if 1   // show bmp
     printf("show window BMP-----------------\r\n");
     Paint_SelectImage(BlackImage);
     Paint_Clear(WHITE);
@@ -73,7 +68,7 @@ int EPD_2in13_test(void)
     DEV_Delay_ms(2000);
 #endif    
     
-#if 0   //show image for array    
+#if 1   //show image for array    
     printf("show image for array\r\n");
     Paint_SelectImage(BlackImage);
     Paint_Clear(WHITE);
@@ -83,7 +78,7 @@ int EPD_2in13_test(void)
     DEV_Delay_ms(2000);
 #endif
 
-#if 0   // Drawing on the image
+#if 1   // Drawing on the image
     printf("Drawing\r\n");
     //1.Select Image
     Paint_SelectImage(BlackImage);
@@ -115,51 +110,7 @@ int EPD_2in13_test(void)
     DEV_Delay_ms(2000);
 #endif
 
-#if 1 
-
-printf("Hello World!\r\n");
-    
-    EPD_2IN13_Init(EPD_2IN13_PART);
-    Paint_SelectImage(BlackImage);
-    Paint_Clear(BLACK);
-    
-    GUI_ReadBmp("/var/berry.bmp", 150, 22);
-
-    char hostname[1024];
-    char host[NI_MAXHOST];
-    char buff[1060]; int line = 16, family;
-    gethostname(hostname, 1024);
-
-    sprintf(buff, "Welcome to %s", hostname);
-    Paint_DrawString_EN(0, 0, buff, &Font16, BLACK, WHITE);
-    Paint_DrawString_EN(0, 16, "Please SSH!", &Font16, BLACK, WHITE);
-
-    struct ifaddrs *id, *ifa;
-    getifaddrs(&id);
-
-    for (ifa = id; ifa != NULL; ifa = ifa->ifa_next) {
-	if (ifa->ifa_addr == NULL)
-           continue;
-	family = ifa->ifa_addr->sa_family;
-	if (family == AF_PACKET|| family == AF_INET6) continue;
-
-	getnameinfo(ifa->ifa_addr, 
-			(family == AF_INET) ? sizeof(struct sockaddr_in) :
-                                              sizeof(struct sockaddr_in6),
-                           host, NI_MAXHOST,
-                           NULL, 0, NI_NUMERICHOST);
-
-    	line += 16;
-    	sprintf(buff, "IP: %s", host);
-    	Paint_DrawString_EN(0, line, buff, &Font16, BLACK, WHITE);
-    }
-
-
-    EPD_2IN13_Display(BlackImage);
-    DEV_Delay_ms(2000);
-#endif
-
-#if 0   //Partial refresh, example shows time    		
+#if 1   //Partial refresh, example shows time    		
     printf("Partial refresh\r\n");
     EPD_2IN13_Init(EPD_2IN13_PART);
     Paint_SelectImage(BlackImage);
@@ -195,9 +146,9 @@ printf("Hello World!\r\n");
     }
 
 #endif
-    //printf("Clear...\r\n");
-    //EPD_2IN13_Init(EPD_2IN13_FULL);
-    //EPD_2IN13_Clear();
+    printf("Clear...\r\n");
+    EPD_2IN13_Init(EPD_2IN13_FULL);
+    EPD_2IN13_Clear();
 
     printf("Goto Sleep...\r\n");
     EPD_2IN13_Sleep();
